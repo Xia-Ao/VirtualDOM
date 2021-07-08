@@ -1,0 +1,17 @@
+{
+  "name": "VirtualDOM",
+  "version": "0.0.1",
+  "description": "实现一个VirtualDOM",
+  "scripts": {
+    "dev": "node dev/server && tsc -w"
+  },
+  "main": "index.js",
+  "repository": "git@github.com:Xia-Ao/VirtualDOM.git",
+  "author": "xiaao",
+  "license": "MIT",
+  "devDependencies": {
+    "chalk": "^4.1.1",
+    "mime-types": "^2.1.31",
+    "typescript": "^4.3.5"
+  }
+}
