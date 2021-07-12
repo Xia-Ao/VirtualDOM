@@ -3,33 +3,46 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const mime = require('mime-types');
+const { spawn, exec, execFile, fork } = require('child_process');
 
-const port = 8088;
 
-const server = http.createServer( (request, response) => {
- 
-  const url = request.url;
-  // console.log('url--', url);
-  
-  if(url === '/') {
-    // 默认html请求
-    response.writeHead(200, {'Content-Type': mime.contentType('html')});
-    const file = fs.readFileSync(path.resolve('dev/index.html'), {encoding: 'utf-8'});
-    return response.end(file);
-  } else if(url.indexOf('/src') > -1) {
-    // 资源请求
-    // console.log('src---', url, path.extname(url), path.resolve(`.${url}`));
-    response.writeHead(200, {'Content-Type': mime.contentType(path.extname(url))});
-    const file = fs.readFileSync(path.resolve(`.${url}`), {encoding: 'utf-8'});
-    return response.end(file);
+// tsc编译
+console.log(chalk.green('tsc 开始编译...'));
+exec('tsc -w', {}, (err, stdout, stderr) => {
+  if (err) {
+    console.log(chalk.red('tsc编译出错---'))
+    console.log(chalk.red(stderr))
   }
-  // 其他类型的请求
-  response.writeHead(200, {'Content-Type': mime.contentType('text')});
-  response.end('')
-  return;
+  console.log('tsc编译结束---');
+})
+
+// server
+const port = 8088;
+const server = http.createServer((request, response) => {
+  const url = request.url;
+  let data = null;
+  console.log('url:', url);
+  switch (true) {
+    case url === '/':  // 默认html请求
+      response.writeHead(200, { 'Content-Type': mime.contentType('html') });
+      data = fs.readFileSync(path.resolve('src/index.html'), { encoding: 'utf-8' });
+      break;
+    case url.indexOf('/dist') > -1: // js 资源请求
+      const pathName = path.extname(url) ? url : url + '.js'
+      response.writeHead(200, { 'Content-Type': mime.contentType(path.extname(pathName)) });
+      data = fs.readFileSync(path.resolve(`.${pathName}`), { encoding: 'utf-8' });
+      break;
+    default:
+      // response.writeHead(200, {'Content-Type': mime.contentType('text')});
+      break;
+  }
+  response.end(data)
 });
 
 server.listen(port);
 
 
-console.log(chalk.green(`server running at: ${port}  http://localhost:${port}` ))
+console.log(chalk.green(`server running at: ${port}  http://localhost:${port}`))
+
+
+

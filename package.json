@@ -3,14 +3,18 @@
   "version": "0.0.1",
   "description": "实现一个VirtualDOM",
   "scripts": {
-    "dev": "node dev/server && tsc -w"
+    "dev": "node dev/server",
+    "lint": "eslint src --ext .ts"
   },
   "main": "index.js",
   "repository": "git@github.com:Xia-Ao/VirtualDOM.git",
   "author": "xiaao",
   "license": "MIT",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
     "chalk": "^4.1.1",
+    "eslint": "^7.30.0",
     "mime-types": "^2.1.31",
     "typescript": "^4.3.5"
   }

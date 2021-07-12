@@ -1,10 +1,14 @@
 
-import vDom  from './createVDom.js';
+import { createElement } from "./createVDom";
 
-console.log(vDom);
+const ele = createElement('div', { id: 'app' }, [
+  createElement('p', {}, ['VirtualDom']),
+  createElement('ul', { class: 'ul' }, [
+    createElement('li', { class: 'item' }, ['Item1']),
+    createElement('li', { class: 'item' }, ['Item2']),
+    createElement('li', { class: 'item' }, ['Item3']),
+  ]),
+  createElement('div', {}, ['Hello World'])
+])
 
-
-let a = 1;
-console.log('ts 运行', a);
-
-console.log('22323w')
+console.log(ele);
